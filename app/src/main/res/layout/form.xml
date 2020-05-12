@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="1050dp"
+    android:layout_height="1500dp"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        android:gravity="center">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            app:cardCornerRadius="0dp"
+            app:strokeColor="@color/black"
+            app:strokeWidth="@dimen/strokeForm"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="15dp">
+
+            <ImageView
+                android:layout_margin="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/image_pdf"/>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            app:strokeWidth="@dimen/strokeForm"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="match_parent"
+            app:cardCornerRadius="0dp"
+            app:strokeColor="@color/black"
+            android:padding="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="15dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="RAPID RESPONSE RECOMMENDATION SHEET"
+                android:textSize="30dp"
+                android:textStyle="bold"/>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+
+
+    <com.google.android.material.card.MaterialCardView
+        app:strokeWidth="@dimen/strokeForm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="0dp"
+        app:strokeColor="@color/black"
+        android:padding="10dp"
+        android:layout_marginTop="7.5dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:gravity="center"
+            android:layout_margin="10dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="left">
+
+                <include layout="@layout/tv_isian"
+                    android:id="@+id/tvDateVisit"/>
+                <include layout="@layout/tv_isian"
+                    android:id="@+id/tvEstate"/>
+                <include layout="@layout/tv_isian"
+                    android:id="@+id/tvAfdBlok"/>
+                <include layout="@layout/tv_isian"
+                    android:id="@+id/tvNo"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="left">
+
+                <include layout="@layout/tv_isian"
+                    android:id="@+id/tvRecommendator"/>
+                <include layout="@layout/tv_isian"
+                    android:id="@+id/tvAccompaniedBy"/>
+                <include layout="@layout/tv_isian"
+                    android:id="@+id/tvSubject"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        app:strokeWidth="@dimen/strokeForm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="0dp"
+        app:strokeColor="@color/black"
+        android:padding="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="210dp"
+            android:orientation="horizontal"
+            android:weightSum="4"
+            android:layout_margin="10dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Problem Investigation:"
+                android:textStyle="bold"
+                android:textSize="19dp"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="dummy"
+                android:textStyle="bold"
+                android:textSize="19dp"
+                android:id="@+id/tvProblem"/>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+    <com.google.android.material.card.MaterialCardView
+        app:strokeWidth="@dimen/strokeForm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="0dp"
+        app:strokeColor="@color/black"
+        android:padding="10dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="210dp"
+            android:orientation="horizontal"
+            android:weightSum="4"
+            android:layout_margin="10dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Recommendations:"
+                android:textStyle="bold"
+                android:textSize="19dp"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="dummy"
+                android:textStyle="bold"
+                android:textSize="19dp"
+                android:id="@+id/tvRecommendation"/>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        app:strokeWidth="@dimen/strokeForm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="0dp"
+        app:strokeColor="@color/black"
+        android:padding="10dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="400dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center|top">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Recommendator,"
+                    android:textStyle="bold"
+                    android:gravity="center|top"
+                    android:textSize="18dp"/>
+
+                <TextView
+                    android:id="@+id/tvRecommendator1"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:text="Recommendator,"
+                    android:textStyle="bold"
+                    android:gravity="center|bottom"
+                    android:textSize="18dp"/>
+
+                <TextView
+                    android:id="@+id/tvRecommendator2"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:text="Recommendator,"
+                    android:textStyle="bold"
+                    android:gravity="center|bottom"
+                    android:textSize="18dp"/>
+
+                <TextView
+                    android:id="@+id/tvRecommendator3"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:text="Recommendator,"
+                    android:textStyle="bold"
+                    android:gravity="center|bottom"
+                    android:textSize="18dp"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="400dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center|top">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Received By,"
+                    android:textStyle="bold"
+                    android:gravity="center|top"
+                    android:textSize="18dp"/>
+
+                <TextView
+                    android:id="@+id/tvReceivedBy1"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:text="Recommendator,"
+                    android:textStyle="bold"
+                    android:gravity="center|bottom"
+                    android:textSize="18dp"/>
+
+                <TextView
+                    android:id="@+id/tvReceivedBy2"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:text="Recommendator,"
+                    android:textStyle="bold"
+                    android:gravity="center|bottom"
+                    android:textSize="18dp"/>
+
+                <TextView
+                    android:id="@+id/tvReceivedBy3"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:text="Recommendator,"
+                    android:textStyle="bold"
+                    android:gravity="center|bottom"
+                    android:textSize="18dp"/>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>
