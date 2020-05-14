@@ -57,12 +57,22 @@
             <include layout="@layout/isian"
                 android:id="@+id/recommendation"/>
 
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
             <com.google.android.material.button.MaterialButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="SHARE"
                 android:id="@+id/btSS"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CAMERA"
+                android:id="@+id/btCamera"/>
+        </LinearLayout>
 
             <HorizontalScrollView
                 android:layout_width="match_parent"

@@ -221,28 +221,43 @@
                     android:gravity="center|top"
                     android:textSize="18dp"/>
 
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:id="@+id/fotoRecommendator1"/>
+
                 <TextView
                     android:id="@+id/tvRecommendator1"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="wrap_content"
                     android:text="Recommendator,"
                     android:textStyle="bold"
                     android:gravity="center|bottom"
                     android:textSize="18dp"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:id="@+id/fotoRecommendator2"/>
 
                 <TextView
                     android:id="@+id/tvRecommendator2"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="wrap_content"
                     android:text="Recommendator,"
                     android:textStyle="bold"
                     android:gravity="center|bottom"
                     android:textSize="18dp"/>
 
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:id="@+id/fotoRecommendator3"/>
+
                 <TextView
                     android:id="@+id/tvRecommendator3"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="wrap_content"
                     android:text="Recommendator,"
                     android:textStyle="bold"
                     android:gravity="center|bottom"
@@ -266,28 +281,43 @@
                     android:gravity="center|top"
                     android:textSize="18dp"/>
 
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:id="@+id/fotoReceivedBy1"/>
+
                 <TextView
                     android:id="@+id/tvReceivedBy1"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="wrap_content"
                     android:text="Recommendator,"
                     android:textStyle="bold"
                     android:gravity="center|bottom"
                     android:textSize="18dp"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:id="@+id/fotoReceivedBy2"/>
 
                 <TextView
                     android:id="@+id/tvReceivedBy2"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="wrap_content"
                     android:text="Recommendator,"
                     android:textStyle="bold"
                     android:gravity="center|bottom"
                     android:textSize="18dp"/>
 
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:id="@+id/fotoReceivedBy3"/>
+
                 <TextView
                     android:id="@+id/tvReceivedBy3"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="wrap_content"
                     android:text="Recommendator,"
                     android:textStyle="bold"
                     android:gravity="center|bottom"

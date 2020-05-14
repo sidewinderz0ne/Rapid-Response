@@ -1,7 +1,10 @@
 package com.example.rapidresponse
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.ActivityNotFoundException
+import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -11,18 +14,26 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.StrictMode
 import android.os.StrictMode.VmPolicy
+import android.provider.MediaStore
 import android.text.InputType
+import android.util.Log
 import android.view.View
+import android.webkit.PermissionRequest
 import android.widget.HorizontalScrollView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
 import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
 import com.itextpdf.text.Document
 import com.itextpdf.text.Image
 import com.itextpdf.text.Rectangle
 import com.itextpdf.text.pdf.PdfWriter
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.form.*
 import kotlinx.android.synthetic.main.form.view.*
@@ -36,10 +47,15 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
+    private val imageCaptureCode = 1001 //periksa udah foto atau belum
+    var imageUri: Uri? = null //file gambar dari foto
+
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        checkGeneralPermissions()
 
         setText(dateVisit, "Date Visit", InputType.TYPE_TEXT_VARIATION_PERSON_NAME.or(InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS))
         setText(estate, "Estate", InputType.TYPE_TEXT_VARIATION_PERSON_NAME.or(InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS))
@@ -62,6 +78,10 @@ class MainActivity : AppCompatActivity() {
         tvRecommendator.tvDataDes.text = "Recommendator"
         tvAccompaniedBy.tvDataDes.text = "Accompanied By"
         tvSubject.tvDataDes.text = "Subject"
+
+        btCamera.setOnClickListener {
+            openCamera()
+        }
 
         Glide.with(this)//GLIDE LOGO FOR LOADING LAYOUT
             .load(R.drawable.logo_png_white)
@@ -167,5 +187,49 @@ class MainActivity : AppCompatActivity() {
         } catch (e: ActivityNotFoundException) {
             Toast.makeText(this, "Terjadi kesalahan", Toast.LENGTH_LONG).show()
         }
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK){
+            //set image captured to image view
+            fotoRecommendator1.setImageURI(imageUri)
+        }
+    }
+
+    private fun openCamera() {
+        val values = ContentValues()
+        values.put(MediaStore.Images.Media.TITLE, "New Picture")
+        values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera")
+        imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+        //camera intent
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
+        startActivityForResult(cameraIntent, imageCaptureCode)
+    }
+
+    //fungsi untuk check permissions
+    private fun checkGeneralPermissions(){
+        val shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(this@MainActivity,
+            Manifest.permission.CAMERA)
+        Dexter.withActivity(this)
+            .withPermissions(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.INTERNET
+            ).withListener(object : MultiplePermissionsListener {
+                override fun onPermissionsChecked(report: MultiplePermissionsReport) {
+                }
+                override fun onPermissionRationaleShouldBeShown(
+                    permissions: MutableList<com.karumi.dexter.listener.PermissionRequest>?,
+                    token: PermissionToken?
+                ) {
+                    if (shouldProvideRationale){
+                    }
+                }
+            }).check()
+
     }
 }
