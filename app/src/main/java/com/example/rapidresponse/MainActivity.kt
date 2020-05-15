@@ -3,13 +3,15 @@ package com.example.rapidresponse
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.ContentValues
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.net.Uri
-import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Environment
 import android.os.StrictMode
@@ -18,14 +20,12 @@ import android.provider.MediaStore
 import android.text.InputType
 import android.util.Log
 import android.view.View
-import android.webkit.PermissionRequest
 import android.widget.HorizontalScrollView
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import com.bumptech.glide.Glide
-import com.google.android.material.button.MaterialButton
 import com.itextpdf.text.Document
 import com.itextpdf.text.Image
 import com.itextpdf.text.Rectangle
@@ -39,16 +39,27 @@ import kotlinx.android.synthetic.main.form.*
 import kotlinx.android.synthetic.main.form.view.*
 import kotlinx.android.synthetic.main.isian.view.*
 import kotlinx.android.synthetic.main.tv_isian.view.*
-import java.io.File
-import java.io.FileOutputStream
-import java.lang.Exception
+import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val imageCaptureCode = 1001 //periksa udah foto atau belum
-    var imageUri: Uri? = null //file gambar dari foto
+    var imageUri1: Uri? = null //file gambar dari kamera
+    var imageUri2: Uri? = null //file gambar dari kamera
+    var imageUri3: Uri? = null //file gambar dari kamera
+    var fileUri: Uri? = null //file gambar dari galeri
+    lateinit var bitmap1: Bitmap
+    lateinit var bitmap2: Bitmap
+    lateinit var bitmap3: Bitmap
+    lateinit var decoded1: Bitmap
+    lateinit var decoded2: Bitmap
+    lateinit var decoded3: Bitmap
+    val REQUEST_CAMERA = 0
+    val SELECT_FILE = 0
+
+    var bitmap_size = 40
+    var max_resolution_image = 800
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,8 +90,14 @@ class MainActivity : AppCompatActivity() {
         tvAccompaniedBy.tvDataDes.text = "Accompanied By"
         tvSubject.tvDataDes.text = "Subject"
 
-        btCamera.setOnClickListener {
-            openCamera()
+        btCamera1.setOnClickListener {
+            selectImage(formHasil.fotoRecommendator1, "1")
+        }
+        btCamera2.setOnClickListener {
+            selectImage(formHasil.fotoRecommendator2, "2")
+        }
+        btCamera3.setOnClickListener {
+            selectImage(formHasil.fotoRecommendator3, "3")
         }
 
         Glide.with(this)//GLIDE LOGO FOR LOADING LAYOUT
@@ -152,7 +169,7 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Terjadi kesalahan", Toast.LENGTH_SHORT).show()
         }
         try {
-            val pagesize = Rectangle(1100f, 1400f)
+            val pagesize = Rectangle(1050f, 1700f)
             val document = Document(pagesize)
             PdfWriter.getInstance(document, FileOutputStream("$dirPath${File.separator}RapidResponse $editestateStr $editblok1Str $now.PDF")) //  Change pdf's name.
             document.open()
@@ -189,24 +206,150 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun selectImage(iv: ImageView, string: String) {
+        val str = string
+        iv.setImageResource(0)
+        val items = arrayOf("Kamera (Miringkan kamera)", "Pilih dari galeri", "Batal")
+        val builder = AlertDialog.Builder(this).setTitle("Tambahkan Foto").setIcon(R.drawable.ic_launcher_rapidresponse)
+        builder.setItems(items, DialogInterface.OnClickListener { dialog, which ->
+            if (items[which].equals("Kamera (Miringkan kamera)")){
+                if (str.equals("1")){
+                    openCamera1()
+                } else if (str.equals("2")){
+                    openCamera2()
+                } else if (str.equals("3")) {
+                    openCamera3()
+                } else {
+                    Toast.makeText(this, "kamera error", Toast.LENGTH_SHORT).show()
+                }
+            } else if (items[which].equals("Pilih dari galeri")){
+                intent = Intent().setType("image/*")
+                intent = Intent(Intent.ACTION_GET_CONTENT)
+                startActivityForResult(Intent.createChooser(intent, "Pilih Gambar"), str.toInt())
+            } else if (items[which].equals("Batal")){
+                dialog.dismiss()
+            }
+        })
+        builder.show()
+    }
+
+    private fun getOutputMediaFile(): File? {
+        var mediaStorageDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Form")
+        if (!mediaStorageDir.exists()){
+            if (!mediaStorageDir.mkdirs()){
+                Log.e("Monitoring", "Oops! Gagal membuat direktori monitoring")
+                return null
+            }
+        }
+        var timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        var mediaFile = File(mediaStorageDir.path + File.separator + "IMG_Form_" + timeStamp + ".jpg")
+
+        return mediaFile
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK){
-            //set image captured to image view
-            fotoRecommendator1.setImageURI(imageUri)
+            if (requestCode == REQUEST_CAMERA){
+                Glide.with(this).load(imageUri1).into(fotoRecommendator1)
+                Glide.with(this).load(imageUri2).into(fotoRecommendator2)
+                Glide.with(this).load(imageUri3).into(fotoRecommendator3)
+
+            } else if (requestCode == 1 && data != null && data.data != null) {
+                try {
+                    bitmap1 = MediaStore.Images.Media.getBitmap(this.contentResolver, data.data)
+                    setToImageView1(getResizeBitmap(bitmap1, max_resolution_image.toFloat()))
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            } else if (requestCode == 2 && data != null && data.data != null) {
+                try {
+                    bitmap2 = MediaStore.Images.Media.getBitmap(this.contentResolver, data.data)
+                    setToImageView2(getResizeBitmap(bitmap2, max_resolution_image.toFloat()))
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            } else if (requestCode == 3 && data != null && data.data != null) {
+                try {
+                    bitmap3 = MediaStore.Images.Media.getBitmap(this.contentResolver, data.data)
+                    setToImageView3(getResizeBitmap(bitmap3, max_resolution_image.toFloat()))
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            }
         }
     }
 
-    private fun openCamera() {
+    private fun openCamera1() {
         val values = ContentValues()
         values.put(MediaStore.Images.Media.TITLE, "New Picture")
         values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera")
-        imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+        imageUri1 = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
         //camera intent
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
-        startActivityForResult(cameraIntent, imageCaptureCode)
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri1)
+        startActivityForResult(cameraIntent, REQUEST_CAMERA)
+    }
+
+    private fun openCamera2() {
+        val values = ContentValues()
+        values.put(MediaStore.Images.Media.TITLE, "New Picture")
+        values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera")
+        imageUri2 = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+        //camera intent
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri2)
+        startActivityForResult(cameraIntent, REQUEST_CAMERA)
+    }
+
+    private fun openCamera3() {
+        val values = ContentValues()
+        values.put(MediaStore.Images.Media.TITLE, "New Picture")
+        values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera")
+        imageUri3 = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+        //camera intent
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri3)
+        startActivityForResult(cameraIntent, REQUEST_CAMERA)
+    }
+
+    private fun setToImageView1(bmp: Bitmap){
+        var bytes = ByteArrayOutputStream()
+        bmp.compress(Bitmap.CompressFormat.JPEG, bitmap_size, bytes)
+        decoded1 = BitmapFactory.decodeStream(ByteArrayInputStream(bytes.toByteArray()))
+
+        Glide.with(this).load(decoded1).into(formHasil.fotoRecommendator1)
+    }
+
+    private fun setToImageView2(bmp: Bitmap){
+        var bytes = ByteArrayOutputStream()
+        bmp.compress(Bitmap.CompressFormat.JPEG, bitmap_size, bytes)
+        decoded2 = BitmapFactory.decodeStream(ByteArrayInputStream(bytes.toByteArray()))
+
+        Glide.with(this).load(decoded2).into(formHasil.fotoRecommendator2)
+    }
+
+    private fun setToImageView3(bmp: Bitmap){
+        var bytes = ByteArrayOutputStream()
+        bmp.compress(Bitmap.CompressFormat.JPEG, bitmap_size, bytes)
+        decoded3 = BitmapFactory.decodeStream(ByteArrayInputStream(bytes.toByteArray()))
+
+        Glide.with(this).load(decoded3).into(formHasil.fotoRecommendator3)
+    }
+
+    fun getResizeBitmap(image: Bitmap, maxSize: Float): Bitmap {
+        var width = image.width
+        var height = image.height
+
+        val bitmapRatio = width.toFloat() / height.toFloat()
+        if (bitmapRatio > 1) {
+            width = maxSize.toInt()
+            height = (width / bitmapRatio).toInt()
+        } else {
+            height = maxSize.toInt()
+            width = (height * bitmapRatio).toInt()
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true)
     }
 
     //fungsi untuk check permissions
@@ -230,6 +373,20 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }).check()
+    }
 
+    override fun onBackPressed() {
+        val builder =
+            androidx.appcompat.app.AlertDialog.Builder(this@MainActivity)
+        builder.setMessage("Apakah anda yakin ingin keluar dari Aplikasi?")
+        builder.setCancelable(true)
+        builder.setNegativeButton(
+            "Tidak"
+        ) { dialog, which -> dialog.cancel() }
+        builder.setPositiveButton(
+            "Ya"
+        ) { dialog, which -> finishAffinity() }
+        val alertDialog = builder.create()
+        alertDialog.show()
     }
 }
