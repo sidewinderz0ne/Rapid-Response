@@ -14,13 +14,21 @@
         android:roundIcon="@drawable/ic_launcher_rapidresponse"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
-            android:theme="@style/materialWhiteBar">
+
+        <activity
+            android:name=".Splash"
+            android:screenOrientation="unspecified"
+            android:theme="@style/transStatusBarBlackIcons">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/materialWhiteBar" />
     </application>
 
 </manifest>
